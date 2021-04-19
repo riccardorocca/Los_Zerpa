@@ -18,6 +18,7 @@
     <button id="keyC1">Texture</button>
     <button id="keyC2">Facies</button>
     <button id="keyC3">B&W</button>
+    <img id="legend" hidden src="https://riccardorocca.github.io/Los_Zerpa/Legend.png"></img>
     <button id="keyA">Stage 1</button>
     <button id="keyA1"><</button>
     <button id="keyA2">></button>
@@ -265,7 +266,7 @@ Two terraces along the inner slope of the lateral moraine (2) witness this evolu
                 buttonC1.style.backgroundColor = "#1caad9";
                 buttonC2.style.backgroundColor = "#888888";
                 buttonC3.style.backgroundColor = "#888888";
-                //document.getElementById("legend").style.display = "none";
+                document.getElementById("legend").style.display = "none";
                 api.updateTexture('https://riccardorocca.github.io/Los_Zerpa/TopoXY_image.jpg', texture_TopoXY, function(err, texture_TopoXY) {});
                 api.updateTexture('https://riccardorocca.github.io/Los_Zerpa/TopoS_image.jpg',  texture_TopoS,  function(err, texture_TopoS) {});
               });
@@ -274,7 +275,7 @@ Two terraces along the inner slope of the lateral moraine (2) witness this evolu
                 buttonC1.style.backgroundColor = "#888888";
                 buttonC2.style.backgroundColor = "#1caad9";
                 buttonC3.style.backgroundColor = "#888888";
-                //document.getElementById("legend").style.display = "block";
+                document.getElementById("legend").style.display = "block";
                 api.updateTexture('https://riccardorocca.github.io/Los_Zerpa/TopoXYfacies_image.jpg', texture_TopoXY, function(err, texture_TopoXY) {});
                 api.updateTexture('https://riccardorocca.github.io/Los_Zerpa/TopoSfacies_image.jpg',  texture_TopoS,  function(err, texture_TopoS) {});
               });
@@ -283,7 +284,7 @@ Two terraces along the inner slope of the lateral moraine (2) witness this evolu
                 buttonC1.style.backgroundColor = "#888888";
                 buttonC2.style.backgroundColor = "#888888";
                 buttonC3.style.backgroundColor = "#1caad9";
-                //document.getElementById("legend").style.display = "none";
+                document.getElementById("legend").style.display = "none";
                 api.updateTexture('https://riccardorocca.github.io/Los_Zerpa/Gray_image.jpg', texture_TopoXY, function(err, texture_TopoXY) {});
                 api.updateTexture('https://riccardorocca.github.io/Los_Zerpa/Gray_image.jpg', texture_TopoS,  function(err, texture_TopoS) {});
               });
@@ -291,24 +292,6 @@ Two terraces along the inner slope of the lateral moraine (2) witness this evolu
 
           }
         });
-
-/*
-        // Add button event
-        buttonC.addEventListener( 'click', function() {
-          switch(buttonC.innerHTML) {
-            case "Texture ON":
-              api.setShadingStyle('matcap', {type: 'matcap'}, function(err) {});
-              buttonC.innerHTML = "Texture OFF";
-              buttonC.style.backgroundColor = "#888888";
-              break;
-            case "Texture OFF":
-              api.setShadingStyle('pbr', {type: 'lit'}, function(err) {});
-              buttonC.innerHTML = "Texture ON";
-              buttonC.style.backgroundColor = "#1caad9";
-              break;
-            }
-        });
-*/
 
         // Add button event
         buttonD.addEventListener( 'click', function() {
@@ -376,8 +359,16 @@ Two terraces along the inner slope of the lateral moraine (2) witness this evolu
       font-weight: bold;
     }
 
+    img{
+      margin-left: auto;
+      margin-right: auto;
+      width: 180px;
+    }
+
     textarea {
-      width: 150px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 180px;
       height: auto;
       margin-top: 12px;
       resize: none;
