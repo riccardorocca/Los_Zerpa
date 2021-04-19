@@ -259,13 +259,13 @@ Two terraces along the inner slope of the lateral moraine (2) witness this evolu
               if (textures[prop].name === "TopoS_image.jpg")  { var texture_TopoS  = textures[prop].uid; }
             }
 
-            if ( texture_Topo ) {
+            if ( texture_TopoXY && texture_TopoS ) {
               // Add button event
               buttonC1.addEventListener( 'click', function() {
                 buttonC1.style.backgroundColor = "#1caad9";
                 buttonC2.style.backgroundColor = "#888888";
                 buttonC3.style.backgroundColor = "#888888";
-                document.getElementById("legend").style.display = "none";
+                //document.getElementById("legend").style.display = "none";
                 api.updateTexture('https://riccardorocca.github.io/Los_Zerpa/TopoXY_image.jpg', texture_TopoXY, function(err, texture_TopoXY) {});
                 api.updateTexture('https://riccardorocca.github.io/Los_Zerpa/TopoS_image.jpg',  texture_TopoS,  function(err, texture_TopoS) {});
               });
@@ -283,8 +283,9 @@ Two terraces along the inner slope of the lateral moraine (2) witness this evolu
                 buttonC1.style.backgroundColor = "#888888";
                 buttonC2.style.backgroundColor = "#888888";
                 buttonC3.style.backgroundColor = "#1caad9";
-                document.getElementById("legend").style.display = "none";
-                api.updateTexture('https://riccardorocca.github.io/Los_Zerpa/Gray_image.jpg', texture_Topo, function(err, texture_Topo) {});
+                //document.getElementById("legend").style.display = "none";
+                api.updateTexture('https://riccardorocca.github.io/Los_Zerpa/Gray_image.jpg', texture_TopoXY, function(err, texture_TopoXY) {});
+                api.updateTexture('https://riccardorocca.github.io/Los_Zerpa/Gray_image.jpg', texture_TopoS,  function(err, texture_TopoS) {});
               });
             }
 
@@ -391,7 +392,9 @@ Two terraces along the inner slope of the lateral moraine (2) witness this evolu
     #keyA1 {background: #888888; width: 48%; display: inline;}
     #keyA2 {background: #1caad9; width: 49%; display: inline;}
     #keyB {background: #1caad9; margin-top: 10px;}
-    #keyC {background: #1caad9;}
+    #keyC1 {background: #1caad9; width: 31%; display: inline; font-size: x-small;}
+    #keyC2 {background: #888888; width: 32%; display: inline; font-size: x-small;}
+    #keyC3 {background: #888888; width: 31%; display: inline; font-size: x-small;}
     #keyD {background: #1caad9;}
 
   </style>
