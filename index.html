@@ -1,0 +1,353 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sketchfab Viewer API example</title>
+
+  <!-- Insert this script -->
+  <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.8.2.js"></script>
+</head>
+
+<body>
+  <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+  <div class="buttons">
+    <button id="keyD">Background Info</button>
+    <button id="keyB">Interpretation ON</button>
+    <button id="keyC">Texture ON</button>
+    <button id="keyA">Stage 1</button>
+    <button id="keyA1"><</button>
+    <button id="keyA2">></button>
+    <br>
+
+    <textarea id="text1" rows="10">
+18,000 - 13,000 years before present, the "Los Zerpa" river valley was occupied by a glacier that formed the moraines that bound the valley today (2, 3).
+
+The glacier melt-water drained over the terminal moraine (3).
+    </textarea>
+    <textarea id="text2" rows="11" hidden>
+When the glacier began to retreat, fluvio-glacial sediments were deposited, forming an alluvial plain that is stil preserved nowadays in the upper part of the valley (5).
+
+The outward drainage continued to flow through the terminal moraine (3).
+    </textarea>
+    <textarea id="text3" rows="20" hidden>
+The strike-slip offset along the Boconó fault (1) opened a breach through the right lateral moraine (4) and the river started to drain through this opening.
+
+The old drainage through the terminal moraine was abandoned (3).
+
+The river started to incise the fluvio-glacial deposits of the previous stage and originated a terrace 20-25 m above the present-day river level (5).
+
+After some time the breach (4) was partially closed and new deposits filled the valley.
+    </textarea>
+    <textarea id="text4" rows="16" hidden>
+Present day.
+
+Repeated offsets along the Boconó fault have re-opened the breach through the right lateral moraine (4).
+
+The river has incised the previous deposits and has formed a second terrace 6-10 m above the present-day river level.
+
+Two terraces along the inner slope of the lateral moraine (2) witness this evolution.
+    </textarea>
+  </div>
+
+  <!-- Your new script -->
+  <script>
+    var model = 'dcdfe0a18f074e74901edff3578c8eb8',
+
+    // Buttons
+    buttonA = document.getElementById( 'keyA' ),
+    buttonA1 = document.getElementById( 'keyA1' ),
+    buttonA2 = document.getElementById( 'keyA2' ),
+    buttonB = document.getElementById( 'keyB' ),
+    buttonC = document.getElementById( 'keyC' ),
+    buttonD = document.getElementById( 'keyD' ),
+    text1 = document.getElementById( 'text1' ),
+    text2 = document.getElementById( 'text2' ),
+    text3 = document.getElementById( 'text3' ),
+    text4 = document.getElementById( 'text4' ),
+
+    // Variables
+    version = '1.7.1',
+    iframe = document.getElementById( 'api-frame' ),
+    client = new Sketchfab( version, iframe ),
+
+    error = function () {
+      console.error( 'Sketchfab API Error!' );
+    },
+
+    success = function( api ) {
+      api.start();
+      // Wait for viewer to be ready
+      api.addEventListener( 'viewerready', function() {
+        // Get the object nodes
+        api.getNodeMap( function ( err, nodes ) {
+          if ( !err ) {
+            for ( var prop in nodes ) {
+              if ( nodes.hasOwnProperty( prop ) ) {
+                if ( nodes[ prop ].name === "Fault" )                                                { var node_Fault = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "TopoX" && nodes[prop].type === "MatrixTransform" ) { var node_TopoX = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "TopoY" && nodes[prop].type === "MatrixTransform" ) { var node_TopoY = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "RiverA" )                                          { var node_RiverA = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "RiverB12" )                                        { var node_RiverB12 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "RiverB34" )                                        { var node_RiverB34 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "RiverC2" )                                         { var node_RiverC2 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "RiverC3" )                                         { var node_RiverC3 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "RiverC4" )                                         { var node_RiverC4 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Fill1" )                                           { var node_Fill1 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Fill2" )                                           { var node_Fill2 = nodes[prop].instanceID; }
+                else if ( nodes[ prop ].name === "Fill3" )                                           { var node_Fill3 = nodes[prop].instanceID; }
+              }
+            }
+
+            if (node_TopoX && node_TopoY && node_RiverA && node_RiverB12 && node_RiverB34 && node_RiverC2 && node_RiverC3 && node_RiverC4 && node_Fill1 && node_Fill2 && node_Fill3) {
+              // Setup initial view
+              api.hide(node_RiverB34); api.hide(node_Fill2);
+              api.hide(node_RiverC2);  api.hide(node_Fill3);
+              api.hide(node_RiverC3);
+              api.hide(node_RiverC4);
+              api.translate(node_TopoX, [+5000,0,0], 1.0, 'easeLinear');
+              api.translate(node_TopoY, [-5000,0,0], 1.0, 'easeLinear');
+
+              // Add button event
+              buttonA1.addEventListener( 'click', function() {
+                switch(buttonA.innerHTML) {
+                  case "Stage 2":
+                    buttonA.innerHTML = "Stage 1";
+                    buttonA1.style.backgroundColor = "#888888";
+                    api.translate(node_TopoX, [+5000,0,0], 1.0, 'easeLinear');
+                    api.translate(node_TopoY, [-5000,0,0], 1.0, 'easeLinear');
+                    text1.style.display = "block";
+                    text2.style.display = "none";
+                    text3.style.display = "none";
+                    text4.style.display = "none";
+                    if (buttonB.innerHTML === "Interpretation ON") {
+                      api.show(node_RiverB12); api.show(node_Fill1);
+                      api.hide(node_RiverC2);  api.hide(node_Fill2);
+                      api.hide(node_RiverC3);  api.hide(node_Fill3);
+                      api.hide(node_RiverB34); api.hide(node_RiverC4);
+                    }
+                    break;
+                  case "Stage 3":
+                    buttonA.innerHTML = "Stage 2";
+                    api.translate(node_TopoX, [+4000,0,0], 1.0, 'easeLinear');
+                    api.translate(node_TopoY, [-4000,0,0], 1.0, 'easeLinear');
+                    text1.style.display = "none";
+                    text2.style.display = "block";
+                    text3.style.display = "none";
+                    text4.style.display = "none";
+                    if (buttonB.innerHTML === "Interpretation ON") {
+                      api.show(node_RiverB12); api.hide(node_Fill1);
+                      api.show(node_RiverC2);  api.show(node_Fill2);
+                      api.hide(node_RiverC3);  api.hide(node_Fill3);
+                      api.hide(node_RiverB34); api.hide(node_RiverC4);
+                    }
+                    break;
+                  case "Stage 4":
+                    buttonA.innerHTML = "Stage 3";
+                    buttonA2.style.backgroundColor = "#1caad9";
+                    api.translate(node_TopoX, [+2000,0,0], 1.0, 'easeLinear');
+                    api.translate(node_TopoY, [-2000,0,0], 1.0, 'easeLinear');
+                    text1.style.display = "none";
+                    text2.style.display = "none";
+                    text3.style.display = "block";
+                    text4.style.display = "none";
+                    if (buttonB.innerHTML === "Interpretation ON") {
+                      api.hide(node_RiverB12); api.hide(node_Fill1);
+                      api.hide(node_RiverC2);  api.hide(node_Fill2);
+                      api.show(node_RiverC3);  api.show(node_Fill3);
+                      api.show(node_RiverB34); api.hide(node_RiverC4);
+                    }
+                    break;
+                }
+              });
+
+              buttonA2.addEventListener( 'click', function() {
+                switch(buttonA.innerHTML) {
+                  case "Stage 1":
+                    buttonA.innerHTML = "Stage 2";
+                    buttonA1.style.backgroundColor = "#1caad9";
+                    api.translate(node_TopoX, [+4000,0,0], 1.0, 'easeLinear');
+                    api.translate(node_TopoY, [-4000,0,0], 1.0, 'easeLinear');
+                    text1.style.display = "none";
+                    text2.style.display = "block";
+                    text3.style.display = "none";
+                    text4.style.display = "none";
+                    if (buttonB.innerHTML === "Interpretation ON") {
+                      api.show(node_RiverB12); api.hide(node_Fill1);
+                      api.show(node_RiverC2);  api.show(node_Fill2);
+                      api.hide(node_RiverC3);  api.hide(node_Fill3);
+                      api.hide(node_RiverB34); api.hide(node_RiverC4);
+                    }
+                    break;
+                  case "Stage 2":
+                    buttonA.innerHTML = "Stage 3";
+                    api.translate(node_TopoX, [+2000,0,0], 1.0, 'easeLinear');
+                    api.translate(node_TopoY, [-2000,0,0], 1.0, 'easeLinear');
+                    text1.style.display = "none";
+                    text2.style.display = "none";
+                    text3.style.display = "block";
+                    text4.style.display = "none";
+                    if (buttonB.innerHTML === "Interpretation ON") {
+                      api.hide(node_RiverB12); api.hide(node_Fill1);
+                      api.hide(node_RiverC2);  api.hide(node_Fill2);
+                      api.show(node_RiverC3);  api.show(node_Fill3);
+                      api.show(node_RiverB34); api.hide(node_RiverC4);
+                    }
+                    break;
+                  case "Stage 3":
+                    buttonA.innerHTML = "Stage 4";
+                    buttonA2.style.backgroundColor = "#888888";
+                    api.translate(node_TopoX, [1,1,1], 1.0, 'easeLinear');
+                    api.translate(node_TopoY, [1,1,1], 1.0, 'easeLinear');
+                    text1.style.display = "none";
+                    text2.style.display = "none";
+                    text3.style.display = "none";
+                    text4.style.display = "block";
+                    if (buttonB.innerHTML === "Interpretation ON") {
+                      api.hide(node_RiverB12); api.hide(node_Fill1);
+                      api.hide(node_RiverC2);  api.hide(node_Fill2);
+                      api.hide(node_RiverC3);  api.hide(node_Fill3);
+                      api.show(node_RiverB34); api.show(node_RiverC4);
+                    }
+                    break;
+                }
+              });
+            }
+
+            if ( node_Fault ) {
+              // Add button event
+              buttonB.addEventListener( 'click', function() {
+                switch(buttonB.innerHTML) {
+                  case "Interpretation ON":
+                    buttonB.innerHTML = "Interpretation OFF";
+                    buttonB.style.backgroundColor = "#888888";
+                    api.hideAnnotation(0);
+                    api.hide(node_Fault);    api.hide(node_RiverA);
+                    api.hide(node_RiverB12); api.hide(node_Fill1);
+                    api.hide(node_RiverC2);  api.hide(node_Fill2);
+                    api.hide(node_RiverC3);  api.hide(node_Fill3);
+                    api.hide(node_RiverB34); api.hide(node_RiverC4);
+                    break;
+                  case "Interpretation OFF":
+                    buttonB.innerHTML = "Interpretation ON";
+                    buttonB.style.backgroundColor = "#1caad9";
+                    api.showAnnotation(0);
+                    api.show(node_Fault);    api.show(node_RiverA);
+                    switch(buttonA.innerHTML) {
+                      case "Stage 1": api.show(node_RiverB12); api.show(node_Fill1); break;
+                      case "Stage 2": api.show(node_RiverB12); api.show(node_RiverC2); api.show(node_Fill2); break;
+                      case "Stage 3": api.show(node_RiverC3);  api.show(node_Fill3);   api.show(node_RiverB34); break;
+                      case "Stage 4": api.show(node_RiverB34); api.show(node_RiverC4); break;
+                    }
+                    break;
+                }
+              });
+            }
+
+          }
+        });
+
+        // Add button event
+        buttonC.addEventListener( 'click', function() {
+          switch(buttonC.innerHTML) {
+            case "Texture ON":
+              api.setShadingStyle('matcap', {type: 'matcap'}, function(err) {});
+              buttonC.innerHTML = "Texture OFF";
+              buttonC.style.backgroundColor = "#888888";
+              break;
+            case "Texture OFF":
+              api.setShadingStyle('pbr', {type: 'lit'}, function(err) {});
+              buttonC.innerHTML = "Texture ON";
+              buttonC.style.backgroundColor = "#1caad9";
+              break;
+            }
+        });
+
+        // Add button event
+        buttonD.addEventListener( 'click', function() {
+          window.open("https://sites.google.com/site/riccardorocca62/drone-projects/drone-bocono-fault");
+        });
+
+      });
+    };
+
+    // Load the model
+    client.init( model, {
+      success: success,
+      error: error,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_stop: 1,
+      watermark: 1,
+      supersample: 0
+    });
+
+  </script>
+
+  <!-- Lastly, some CSS -->
+  <style type="text/css">
+
+    body {
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Button style */
+    .buttons {
+      margin: 35px 5px;
+      right: 0;
+      top: : 0;
+      z-index: 1;
+      position: absolute;
+    }
+
+    button {
+      width: 100%;
+      height: 25px;
+      line-height: 21px;
+      text-transform: capitalize;
+      color: white;
+      opacity: 0.8;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      vertical-align: middle;
+      display: block;
+      margin-top: 2px;
+    }
+
+    button:hover {
+      opacity: 1;
+    }
+
+    button:active {
+      font-weight: bold;
+    }
+
+    textarea {
+      width: 150px;
+      height: auto;
+      margin-top: 12px;
+      resize: none;
+      overflow: hidden;
+      font-family: Verdana, sans-serif;
+      font-size: 10px;
+      text-align: justify;
+      opacity: 0.8;
+    }
+
+    #keyA {background: #0000ff; font-size: large; font-weight: bold;  margin-top: 10px;}
+    #keyA1 {background: #888888; width: 48%; display: inline;}
+    #keyA2 {background: #1caad9; width: 49%; display: inline;}
+    #keyB {background: #1caad9; margin-top: 10px;}
+    #keyC {background: #1caad9;}
+    #keyD {background: #1caad9;}
+
+  </style>
+</body>
