@@ -13,6 +13,7 @@
   <iframe style="position:fixed; width:100%; height:100%; border:0" src="" id="api-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" allow="autoplay; fullscreen; vr" allowvr allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
   <div class="buttons">
+    <button id="keyO">BOCONÓ FAULT &<br/>LOS ZERPA MORAINE</button>
     <button id="keyD">Background Info</button>
     <button id="keyB">Interpretation ON</button>
     <button id="keyC1">Texture</button>
@@ -25,28 +26,28 @@
     <br>
 
     <textarea id="text1" rows="10">
-18,000 - 13,000 years before present, the "Los Zerpa" river valley was occupied by a glacier that formed the moraines that bound the valley today (2, 3).
+18,000 - 13,000 years before present, the "Los Zerpa" river valley was occupied by a glacier that formed the moraines that bound the valley today (1, 2).
 
-The glacier melt-water drained over the terminal moraine (3).
+The glacier melt-water drained over the terminal moraine (1).
     </textarea>
     <textarea id="text2" rows="11" hidden>
-When the glacier began to retreat, fluvio-glacial sediments were deposited, forming an alluvial plain that is stil preserved nowadays in the upper part of the valley (5).
+When the glacier began to retreat, fluvio-glacial sediments were deposited, forming an alluvial plain that is stil preserved nowadays in the upper part of the valley (3).
 
-The outward drainage continued to flow through the terminal moraine (3).
+The outward drainage continued to flow through the terminal moraine (1).
     </textarea>
     <textarea id="text3" rows="20" hidden>
-The strike-slip offset along the Boconó fault (1) opened a breach through the right lateral moraine (4) and the river started to drain through this opening.
+The strike-slip offset along the Boconó fault (4) opened a breach through the right lateral moraine (5) and the river started to drain through this opening.
 
-The old drainage through the terminal moraine was abandoned (3).
+The old drainage through the terminal moraine was abandoned (1).
 
-The river started to incise the fluvio-glacial deposits of the previous stage and originated a terrace 20-25 m above the present-day river level (5).
+The river started to incise the fluvio-glacial deposits of the previous stage and originated a terrace 20-25 m above the present-day river level (3).
 
-After some time the breach (4) was partially closed and new deposits filled the valley.
+After some time the breach (5) was partially closed and new deposits filled the valley.
     </textarea>
     <textarea id="text4" rows="16" hidden>
 Present day.
 
-Repeated offsets along the Boconó fault have re-opened the breach through the right lateral moraine (4).
+Repeated offsets along the Boconó fault have re-opened the breach through the right lateral moraine (5).
 
 The river has incised the previous deposits and has formed a second terrace 6-10 m above the present-day river level.
 
@@ -59,6 +60,7 @@ Two terraces along the inner slope of the lateral moraine (2) witness this evolu
     var model = 'dcdfe0a18f074e74901edff3578c8eb8',
 
     // Buttons
+    buttonO = document.getElementById( 'keyO' ),
     buttonA = document.getElementById( 'keyA' ),
     buttonA1 = document.getElementById( 'keyA1' ),
     buttonA2 = document.getElementById( 'keyA2' ),
@@ -107,12 +109,13 @@ Two terraces along the inner slope of the lateral moraine (2) witness this evolu
 
             if (node_TopoX && node_TopoY && node_RiverA && node_RiverB12 && node_RiverB34 && node_RiverC2 && node_RiverC3 && node_RiverC4 && node_Fill1 && node_Fill2 && node_Fill3) {
               // Setup initial view
-              api.hide(node_RiverB34); api.hide(node_Fill2);
-              api.hide(node_RiverC2);  api.hide(node_Fill3);
-              api.hide(node_RiverC3);
-              api.hide(node_RiverC4);
+              HideInterpretation();
+              api.show(node_RiverB12);
+              api.show(node_RiverC2);
+              api.show(node_Fill1);
               api.translate(node_TopoX, [+5000,0,0], 1.0, 'easeLinear');
               api.translate(node_TopoY, [-5000,0,0], 1.0, 'easeLinear');
+              Annotations(1,2,0,0,0);
 
               // Add button event
               buttonA1.addEventListener( 'click', function() {
@@ -122,47 +125,43 @@ Two terraces along the inner slope of the lateral moraine (2) witness this evolu
                     buttonA1.style.backgroundColor = "#888888";
                     api.translate(node_TopoX, [+5000,0,0], 1.0, 'easeLinear');
                     api.translate(node_TopoY, [-5000,0,0], 1.0, 'easeLinear');
+                    HideText();
                     text1.style.display = "block";
-                    text2.style.display = "none";
-                    text3.style.display = "none";
-                    text4.style.display = "none";
                     if (buttonB.innerHTML === "Interpretation ON") {
-                      api.show(node_RiverB12); api.show(node_Fill1);
-                      api.hide(node_RiverC2);  api.hide(node_Fill2);
-                      api.hide(node_RiverC3);  api.hide(node_Fill3);
-                      api.hide(node_RiverB34); api.hide(node_RiverC4);
+                      HideInterpretation();
+                      api.show(node_RiverB12);
+                      api.show(node_Fill1);
                     }
+                    Annotations(1,2,0,0,0);
                     break;
                   case "Stage 3":
                     buttonA.innerHTML = "Stage 2";
                     api.translate(node_TopoX, [+4000,0,0], 1.0, 'easeLinear');
                     api.translate(node_TopoY, [-4000,0,0], 1.0, 'easeLinear');
-                    text1.style.display = "none";
+                    HideText();
                     text2.style.display = "block";
-                    text3.style.display = "none";
-                    text4.style.display = "none";
                     if (buttonB.innerHTML === "Interpretation ON") {
-                      api.show(node_RiverB12); api.hide(node_Fill1);
-                      api.show(node_RiverC2);  api.show(node_Fill2);
-                      api.hide(node_RiverC3);  api.hide(node_Fill3);
-                      api.hide(node_RiverB34); api.hide(node_RiverC4);
+                      HideInterpretation();
+                      api.show(node_RiverB12);
+                      api.show(node_RiverC2);
+                      api.show(node_Fill2);
                     }
+                    Annotations(1,2,3,0,0);
                     break;
                   case "Stage 4":
                     buttonA.innerHTML = "Stage 3";
                     buttonA2.style.backgroundColor = "#1caad9";
                     api.translate(node_TopoX, [+2000,0,0], 1.0, 'easeLinear');
                     api.translate(node_TopoY, [-2000,0,0], 1.0, 'easeLinear');
-                    text1.style.display = "none";
-                    text2.style.display = "none";
+                    HideText();
                     text3.style.display = "block";
-                    text4.style.display = "none";
                     if (buttonB.innerHTML === "Interpretation ON") {
-                      api.hide(node_RiverB12); api.hide(node_Fill1);
-                      api.hide(node_RiverC2);  api.hide(node_Fill2);
-                      api.show(node_RiverC3);  api.show(node_Fill3);
-                      api.show(node_RiverB34); api.hide(node_RiverC4);
+                      HideInterpretation();
+                      api.show(node_RiverC3);
+                      api.show(node_RiverB34);
+                      api.show(node_Fill3);
                     }
+                    Annotations(1,2,3,4,5);
                     break;
                 }
               });
@@ -174,82 +173,99 @@ Two terraces along the inner slope of the lateral moraine (2) witness this evolu
                     buttonA1.style.backgroundColor = "#1caad9";
                     api.translate(node_TopoX, [+4000,0,0], 1.0, 'easeLinear');
                     api.translate(node_TopoY, [-4000,0,0], 1.0, 'easeLinear');
-                    text1.style.display = "none";
+                    HideText();
                     text2.style.display = "block";
-                    text3.style.display = "none";
-                    text4.style.display = "none";
                     if (buttonB.innerHTML === "Interpretation ON") {
-                      api.show(node_RiverB12); api.hide(node_Fill1);
-                      api.show(node_RiverC2);  api.show(node_Fill2);
-                      api.hide(node_RiverC3);  api.hide(node_Fill3);
-                      api.hide(node_RiverB34); api.hide(node_RiverC4);
+                      HideInterpretation();
+                      api.show(node_RiverB12);
+                      api.show(node_RiverC2);
+                      api.show(node_Fill2);
                     }
+                    Annotations(1,2,3,0,0);
                     break;
                   case "Stage 2":
                     buttonA.innerHTML = "Stage 3";
                     api.translate(node_TopoX, [+2000,0,0], 1.0, 'easeLinear');
                     api.translate(node_TopoY, [-2000,0,0], 1.0, 'easeLinear');
-                    text1.style.display = "none";
-                    text2.style.display = "none";
+                    HideText();
                     text3.style.display = "block";
-                    text4.style.display = "none";
                     if (buttonB.innerHTML === "Interpretation ON") {
-                      api.hide(node_RiverB12); api.hide(node_Fill1);
-                      api.hide(node_RiverC2);  api.hide(node_Fill2);
-                      api.show(node_RiverC3);  api.show(node_Fill3);
-                      api.show(node_RiverB34); api.hide(node_RiverC4);
+                      HideInterpretation();
+                      api.show(node_RiverC3);
+                      api.show(node_RiverB34);
+                      api.show(node_Fill3);
                     }
+                    Annotations(1,2,3,4,5);
                     break;
                   case "Stage 3":
                     buttonA.innerHTML = "Stage 4";
                     buttonA2.style.backgroundColor = "#888888";
                     api.translate(node_TopoX, [1,1,1], 1.0, 'easeLinear');
                     api.translate(node_TopoY, [1,1,1], 1.0, 'easeLinear');
-                    text1.style.display = "none";
-                    text2.style.display = "none";
-                    text3.style.display = "none";
+                    HideText();
                     text4.style.display = "block";
                     if (buttonB.innerHTML === "Interpretation ON") {
-                      api.hide(node_RiverB12); api.hide(node_Fill1);
-                      api.hide(node_RiverC2);  api.hide(node_Fill2);
-                      api.hide(node_RiverC3);  api.hide(node_Fill3);
-                      api.show(node_RiverB34); api.show(node_RiverC4);
+                      HideInterpretation();
+                      api.show(node_RiverB34);
+                      api.show(node_RiverC4);
                     }
+                    Annotations(1,2,3,4,5);
                     break;
                 }
               });
-            }
 
-            if ( node_Fault ) {
-              // Add button event
-              buttonB.addEventListener( 'click', function() {
-                switch(buttonB.innerHTML) {
-                  case "Interpretation ON":
-                    buttonB.innerHTML = "Interpretation OFF";
-                    buttonB.style.backgroundColor = "#888888";
-                    api.hideAnnotation(0);
-                    api.hide(node_Fault);    api.hide(node_RiverA);
-                    api.hide(node_RiverB12); api.hide(node_Fill1);
-                    api.hide(node_RiverC2);  api.hide(node_Fill2);
-                    api.hide(node_RiverC3);  api.hide(node_Fill3);
-                    api.hide(node_RiverB34); api.hide(node_RiverC4);
-                    break;
-                  case "Interpretation OFF":
-                    buttonB.innerHTML = "Interpretation ON";
-                    buttonB.style.backgroundColor = "#1caad9";
-                    api.showAnnotation(0);
-                    api.show(node_Fault);    api.show(node_RiverA);
-                    switch(buttonA.innerHTML) {
-                      case "Stage 1": api.show(node_RiverB12); api.show(node_Fill1); break;
-                      case "Stage 2": api.show(node_RiverB12); api.show(node_RiverC2); api.show(node_Fill2); break;
-                      case "Stage 3": api.show(node_RiverC3);  api.show(node_Fill3);   api.show(node_RiverB34); break;
-                      case "Stage 4": api.show(node_RiverB34); api.show(node_RiverC4); break;
-                    }
-                    break;
-                }
-              });
-            }
+              if ( node_Fault ) {
+                // Add button event
+                buttonB.addEventListener( 'click', function() {
+                  switch(buttonB.innerHTML) {
+                    case "Interpretation ON":
+                      buttonB.innerHTML = "Interpretation OFF";
+                      buttonB.style.backgroundColor = "#888888";
+                      api.hide(node_Fault);
+                      api.hide(node_RiverA);
+                      HideInterpretation();
+                      break;
+                    case "Interpretation OFF":
+                      buttonB.innerHTML = "Interpretation ON";
+                      buttonB.style.backgroundColor = "#1caad9";
+                      api.show(node_Fault);
+                      api.show(node_RiverA);
+                      switch(buttonA.innerHTML) {
+                        case "Stage 1": api.show(node_RiverB12); api.show(node_Fill1); break;
+                        case "Stage 2": api.show(node_RiverB12); api.show(node_RiverC2); api.show(node_Fill2); break;
+                        case "Stage 3": api.show(node_RiverC3);  api.show(node_Fill3);   api.show(node_RiverB34); break;
+                        case "Stage 4": api.show(node_RiverB34); api.show(node_RiverC4); break;
+                      }
+                      break;
+                  }
+                });
+              }
 
+              function HideText() {
+                text1.style.display = "none";
+                text2.style.display = "none";
+                text3.style.display = "none";
+                text4.style.display = "none";
+                return;
+              }
+
+              function HideInterpretation() {
+                api.hide(node_RiverB12); api.hide(node_Fill1);
+                api.hide(node_RiverC2);  api.hide(node_Fill2);
+                api.hide(node_RiverC3);  api.hide(node_Fill3);
+                api.hide(node_RiverB34); api.hide(node_RiverC4);
+                return;
+              }
+
+              function Annotations(A1,A2,A3,A4,A5) {
+                if (A1) {api.showAnnotation(0)} else {api.hideAnnotation(0)};
+                if (A2) {api.showAnnotation(1)} else {api.hideAnnotation(1)};
+                if (A3) {api.showAnnotation(2)} else {api.hideAnnotation(2)};
+                if (A4) {api.showAnnotation(3)} else {api.hideAnnotation(3)};
+                if (A5) {api.showAnnotation(4)} else {api.hideAnnotation(4)};
+              }
+
+            }
           }
         });
 
@@ -337,7 +353,7 @@ Two terraces along the inner slope of the lateral moraine (2) witness this evolu
     }
 
     button {
-      width: 100%;
+      width: 180px;
       height: 25px;
       line-height: 21px;
       text-transform: capitalize;
@@ -379,7 +395,8 @@ Two terraces along the inner slope of the lateral moraine (2) witness this evolu
       opacity: 0.8;
     }
 
-    #keyA {background: #0000ff; font-size: large; font-weight: bold;  margin-top: 10px;}
+    #keyO {background: #0000ff; height: auto; font-weight: bold;}
+    #keyA {background: #0000ff; font-size: large; font-weight: bold; margin-top: 10px;}
     #keyA1 {background: #888888; width: 48%; display: inline;}
     #keyA2 {background: #1caad9; width: 49%; display: inline;}
     #keyB {background: #1caad9; margin-top: 10px;}
